@@ -41,12 +41,15 @@ if(CPP_STARTER_USE_NANA)
   add_subdirectory(nana)
 endif()
 
+set(TARGET_NAME "ProjectEstimator")
+
 # Generic test that uses conan libs
-add_executable(intro main.cpp)
+add_executable(${TARGET_NAME} main.cpp)
 target_link_libraries(
-  intro
+  ${TARGET_NAME}
   PRIVATE project_options
           project_warnings
+          LibProjectEstimator
           CONAN_PKG::docopt.cpp
           CONAN_PKG::fmt
           CONAN_PKG::spdlog)

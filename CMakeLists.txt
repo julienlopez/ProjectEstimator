@@ -1,13 +1,13 @@
 cmake_minimum_required(VERSION 3.15)
 
 # Set the project name to your project name, my project isn't very descriptive
-project(myproject CXX)
+project(ProjectEstimator CXX)
 include(cmake/StandardProjectSettings.cmake)
 include(cmake/PreventInSourceBuilds.cmake)
 
 # Link this 'library' to set the c++ standard / compile-time options requested
 add_library(project_options INTERFACE)
-target_compile_features(project_options INTERFACE cxx_std_17)
+target_compile_features(project_options INTERFACE cxx_std_20)
 
 if(CMAKE_CXX_COMPILER_ID MATCHES ".*Clang")
   option(ENABLE_BUILD_WITH_TIME_TRACE "Enable -ftime-trace to generate time tracing .json files on clang" OFF)
@@ -81,11 +81,7 @@ if(ENABLE_TESTING)
   add_subdirectory(test)
 endif()
 
-if(ENABLE_FUZZING)
-  message("Building Fuzz Tests, using fuzzing sanitizer https://www.llvm.org/docs/LibFuzzer.html")
-  add_subdirectory(fuzz_test)
-endif()
-
+add_subdirectory(lib)
 add_subdirectory(src)
 
 option(ENABLE_UNITY "Enable Unity builds of projects" OFF)
