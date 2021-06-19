@@ -13,6 +13,10 @@ public:
 
   double operator()() const override;
 
+  virtual double mean() const override;
+
+  virtual double std_dev() const override;
+
 private:
   const double m_mean;
   const double m_std_dev;

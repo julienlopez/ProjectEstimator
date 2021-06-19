@@ -17,6 +17,10 @@ public:
   Distribution& operator=(Distribution &&) = delete;
 
   virtual double operator()() const = 0;
+
+  virtual double mean() const = 0;
+
+  virtual double std_dev() const = 0;
 };
 
 }// namespace LibProjectEstimator

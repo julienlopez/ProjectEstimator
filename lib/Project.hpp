@@ -25,6 +25,10 @@ public:
 
   double estimate() const;
 
+  double mean() const;
+
+  double std_dev() const;
+
 private:
   Container m_tasks;
 };

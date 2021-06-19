@@ -31,9 +31,9 @@ std::pair<double, double>
   const auto mean = std::accumulate(begin(results), end(results), 0.) / size(results);
   double stddev = 0.;
   for (const auto d : results) {
-    stddev += std::sqrt(std::pow(d - mean, 2));
+    stddev += std::pow(d - mean, 2);
   }
-  return std::make_pair(mean, stddev / size(results));
+  return std::make_pair(mean, std::sqrt(stddev / size(results)));
 }
 
 int main(/*int argc, const char **argv */)
@@ -54,19 +54,29 @@ int main(/*int argc, const char **argv */)
   fmt::print("Hello, from {}\n", "{fmt}");
 
   LibProjectEstimator::Project p;
-  p.addTask({ L"task 1", std::make_unique<LibProjectEstimator::NormalDistribution>(10., 2.) });
-  p.addTask({ L"task 1", std::make_unique<LibProjectEstimator::NormalDistribution>(5., 1.) });
-  p.addTask({ L"task 1", std::make_unique<LibProjectEstimator::NormalDistribution>(3., 3.) });
-  p.addTask({ L"task 1", std::make_unique<LibProjectEstimator::NormalDistribution>(7., 1.) });
-  p.addTask({ L"task 1", std::make_unique<LibProjectEstimator::NormalDistribution>(15., 5.) });
 
-  const std::size_t N = 1000;
-  std::vector<double> results(N);
-  for (auto &res : results)
-    res = p.estimate();
+  // p.addTask({ L"task 1", std::make_unique<LibProjectEstimator::NormalDistribution>(10., 2.) });
+  // p.addTask({ L"task 2", std::make_unique<LibProjectEstimator::NormalDistribution>(5., 1.) });
+  // p.addTask({ L"task 3", std::make_unique<LibProjectEstimator::NormalDistribution>(3., 3.) });
+  // p.addTask({ L"task 4", std::make_unique<LibProjectEstimator::NormalDistribution>(7., 1.) });
+  // p.addTask({ L"task 5", std::make_unique<LibProjectEstimator::NormalDistribution>(15., 10.) });
 
-  fmt::print("Final stats\n");
-  auto [mu, std_dev] = meanAndStdDev(results);
-  fmt::print("mean = {}\n", mu);
-  fmt::print("std dev  = {} \n", std_dev);
+  p.addTask({ L"task 1", std::make_unique<LibProjectEstimator::NormalDistribution>(1., 2.) });
+  p.addTask({ L"task 2", std::make_unique<LibProjectEstimator::NormalDistribution>(1., 4.) });
+
+  std::vector<double> std_devs(100);
+  for (auto &dev : std_devs) {
+    const std::size_t N = 10000;
+    std::vector<double> results(N);
+    for (auto &res : results)
+      res = p.estimate();
+
+    fmt::print("Final stats\n");
+    auto [mu, std_dev] = meanAndStdDev(results);
+    fmt::print("mean = {}\n", mu);
+    fmt::print("std dev  = {} \n", std_dev);
+    dev = std_dev;
+  }
+  fmt::print("\n\nmean std dev = {}\n", meanAndStdDev(std_devs).first);
+  fmt::print("\n\ntheoretical std dev = {}\n", p.std_dev());
 }

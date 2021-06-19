@@ -17,5 +17,14 @@ double NormalDistribution::operator()() const
   return d(gen);
 }
 
+double NormalDistribution::mean() const
+{
+  return m_mean;
+}
+
+double NormalDistribution::std_dev() const
+{
+  return m_std_dev;
+}
 
 }// namespace LibProjectEstimator
